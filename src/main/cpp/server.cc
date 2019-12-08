@@ -35,7 +35,10 @@ using wxhomework::UserLoginResponse;
 using wxhomework::UserRegisterResponse;
 using wxhomework::UserPasswordChangeResponse;
 using wxhomework::State;
-using wxhomework::WxHomework;
+using wxhomework::LoginService;
+using wxhomework::CcatService;
+
+using namespace std;
 
 const char user[] = "root";
 const char pswd[] = "zhang@1998813123";
@@ -47,7 +50,6 @@ const string SUCCESS = "success";
 const string FAIL = "fail";
 const string MISTAKE = "error";
 
-using namespace std;
 
 MYSQL mysql;    //database struct
 MYSQL_RES *res; //result set struct
