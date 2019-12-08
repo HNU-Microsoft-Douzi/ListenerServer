@@ -78,13 +78,23 @@ public :
             Token tk(token);
             if (!tk.token_verify(CLIENT_TOKEN)) {
                 // client token verify fail, because auth_code is not equal with wxclient.
-                return statusGenerated(FAIL, USER_TOKEN_IS_INVALID, "token auth_code verify fail",
-                                       response);
+				User *user = getUserInfoFromDB(account);
+            State *state = new State();
+            state->set_result(FAIL);
+			state->set_code(USER_TOKEN_IS_INVALID);
+            response->set_state(state);
+            response->set_message("token auth_code verify fail");
+			return Status::OK;
             }
         } catch (const char *msg) {
             string errorMsg = account + " " + msg;
             cout << errorMsg << endl;
-            return statusGenerated(MISTAKE, USER_TOKEN_IS_INVALID, errorMsg, response);
+			State *state = new State();
+            state->set_result(MISTAKE);
+			state->set_code(USER_TOKEN_IS_INVALID);
+            response->set_state(state);
+            response->set_message(errorMsg);
+			return Status::OK;
         }
         if (!this->isUserExist(account)) {
             cout << account + " is not register!" << endl;
