@@ -1,0 +1,84 @@
+package(default_visibility = ["//compilers/arm_compiler:__pkg__"])
+
+filegroup(
+    name = "srcs",
+    srcs = glob(["**"]),
+)
+
+filegroup(
+    name = "gcc",
+    srcs = [
+        "arm-linux-gnueabi-gcc",
+        "@org_linaro_components_toolchain_gcc_armv7//:gcc",
+    ],
+)
+
+filegroup(
+    name = "ar",
+    srcs = [
+        "arm-linux-gnueabi-ar",
+        "@org_linaro_components_toolchain_gcc_armv7//:ar",
+    ],
+)
+
+filegroup(
+    name = "ld",
+    srcs = [
+        "arm-linux-gnueabi-ld",
+        "@org_linaro_components_toolchain_gcc_armv7//:ld",
+    ],
+)
+
+filegroup(
+    name = "nm",
+    srcs = [
+        "arm-linux-gnueabi-nm",
+        "@org_linaro_components_toolchain_gcc_armv7//:nm",
+    ],
+)
+
+filegroup(
+    name = "objcopy",
+    srcs = [
+        "arm-linux-gnueabi-objcopy",
+        "@org_linaro_components_toolchain_gcc_armv7//:objcopy",
+    ],
+)
+
+filegroup(
+    name = "objdump",
+    srcs = [
+        "arm-linux-gnueabi-objdump",
+        "@org_linaro_components_toolchain_gcc_armv7//:objdump",
+    ],
+)
+
+filegroup(
+    name = "strip",
+    srcs = [
+        "arm-linux-gnueabi-strip",
+        "@org_linaro_components_toolchain_gcc_armv7//:strip",
+    ],
+)
+
+filegroup(
+    name = "as",
+    srcs = [
+        "arm-linux-gnueabi-as",
+        "@org_linaro_components_toolchain_gcc_armv7//:as",
+    ],
+)
+
+filegroup(
+    name = "tool-wrappers",
+    srcs = [
+        ":ar",
+        ":as",
+        ":gcc",
+        ":ld",
+        ":nm",
+        ":objcopy",
+        ":objdump",
+        ":strip",
+    ],
+)

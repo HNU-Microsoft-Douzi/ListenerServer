@@ -1,0 +1,4 @@
+# this script is used to run bazel clean command.
+# maybe you need to add some other command after clean operation.
+# please add them in the end line.
+bazel clean --expunge

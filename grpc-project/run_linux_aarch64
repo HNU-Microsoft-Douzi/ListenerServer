@@ -1,0 +1,6 @@
+# this script is used to simplify command input.
+# you can run it by using ./run.sh
+
+bazel build --force_pic \
+    --verbose_failures \
+    --config=aarch64 //src/main/cpp:libclient.so

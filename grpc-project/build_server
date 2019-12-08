@@ -1,0 +1,5 @@
+bazel build //src/main/cpp:server
+
+rm -rf runfiles/server
+
+mv bazel-bin/src/main/cpp/server runfiles
