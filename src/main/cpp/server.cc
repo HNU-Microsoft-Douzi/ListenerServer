@@ -93,15 +93,19 @@ public :
 			State *state = new State();
             state->set_result(MISTAKE);
 			state->set_code(USER_TOKEN_IS_INVALID);
-            response->set_state(state);
+            response->set_allocated_state(state);
             response->set_message(errorMsg);
 			return Status::OK;
         }
-        if (!this->isUserExist(account)) {
+        if (!isUserExist(account)) {
             cout << account + " is not register!" << endl;
-            return statusGenerated(MISTAKE, USER_IS_NOT_EXIST,
-                                   "The user name has not been registered, please try again",
-                                   response);
+			User *user = getUserInfoFromDB(account);
+            State *state = new State();
+            state->set_result(MISTAKE);
+			state.set_code(USER_IS_NOT_EXIST);
+            response->set_allocated_state(state);
+            response->set_message("The user name has not been registered, please try again");
+			return Status::OK;
         }
 
         string updateSql = "update user set mid = 1 where account = '" + account + "';";
@@ -110,7 +114,7 @@ public :
             User *user = getUserInfoFromDB(account);
             State *state = new State();
             state->set_result(SUCCESS);
-            response->set_state(state);
+            response->set_allocated_state(state);
             response->set_message("doctor authentication get succeed!");
             response->set_user(user);
         } else {
@@ -118,7 +122,7 @@ public :
             State *state = new State();
             state->set_result(FAIL);
             state->set_code(MYSQL_EXCUTE_EXCEPTION);
-            response->set_state(state);
+            response->set_allocated_state(state);
             response->set_message("mysql execute fail!");
         }
         return Status::OK;
