@@ -65,6 +65,10 @@ Status statusGenerated(string result, string code, string msg, UserLoginResponse
 
 User *getUserInfoFromDB(string account);
 
+string getUserToken(string account);
+
+bool isUserExist(string account);
+
 class CcatImpl final : public CcatService::Service {
 public :
     /*
@@ -83,7 +87,7 @@ public :
             State *state = new State();
             state->set_result(FAIL);
 			state->set_code(USER_TOKEN_IS_INVALID);
-            response->set_state(state);
+            response->set_allocated_state(state);
             response->set_message("token auth_code verify fail");
 			return Status::OK;
             }
@@ -348,7 +352,7 @@ User *getUserInfoFromDB(string account) {
     User *user = new User;
     row = mysql_fetch_row(res);
     user->set_account(row[0]);
-    use->set_mid(row[1]);
+    user->set_mid(row[1]);
     user->set_nick_name(row[2]);
     user->set_level(row[3]);
     user->set_head_url(row[4]);
