@@ -83,12 +83,13 @@ public :
             Token tk(token);
             if (!tk.token_verify(CLIENT_TOKEN)) {
                 // client token verify fail, because auth_code is not equal with wxclient.
-				User *user = getUserInfoFromDB(account);
+			User *user = getUserInfoFromDB(account);
             State *state = new State();
             state->set_result(FAIL);
 			state->set_code(USER_TOKEN_IS_INVALID);
             response->set_allocated_state(state);
             response->set_message("token auth_code verify fail");
+			response->set_user(user);
 			return Status::OK;
             }
         } catch (const char *msg) {
