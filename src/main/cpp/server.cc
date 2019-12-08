@@ -37,6 +37,7 @@ using wxhomework::UserPasswordChangeResponse;
 using wxhomework::State;
 using wxhomework::LoginService;
 using wxhomework::CcatService;
+using wxhomework::User;
 
 using namespace std;
 
@@ -98,7 +99,7 @@ public :
             User *user = getUserInfoFromDB(account);
             State *state = new State();
             state->set_result(SUCCESS);
-            response->set_allocated_state(state);
+            response->set_state(state);
             response->set_message("doctor authentication get succeed!");
             response->set_user(user);
         } else {
@@ -106,7 +107,7 @@ public :
             State *state = new State();
             state->set_result(FAIL);
             state->set_code(MYSQL_EXCUTE_EXCEPTION);
-            response->set_allocated_state(state);
+            response->set_state(state);
             response->set_message("mysql execute fail!");
         }
         return Status::OK;
