@@ -38,6 +38,7 @@ using wxhomework::State;
 using wxhomework::LoginService;
 using wxhomework::CcatService;
 using wxhomework::User;
+using wxhomework::CCATResponse;
 
 using namespace std;
 
@@ -62,7 +63,7 @@ Status statusGenerated(string result, string code, string msg, UserPasswordChang
 
 Status statusGenerated(string result, string code, string msg, UserLoginResponse *response);
 
-User getUserInfoFromDB(string account);
+User *getUserInfoFromDB(string account);
 
 class CcatImpl final : public CcatService::Service {
 public :
@@ -329,7 +330,7 @@ public:
 /*
  * get user info from db except password
  */
-User getUserInfoFromDB(string account) {
+User *getUserInfoFromDB(string account) {
     string queryWords = "select account, mid, nick_name, level, head_url, video_url from user where account = '" + account + "';";
     // query data
     if (mysql_query(&mysql, queryWords.c_str()) != 0) {
@@ -340,14 +341,14 @@ User getUserInfoFromDB(string account) {
     if (!res) {
         cout << "----> mysql_store_result error" << endl;
     }
-    User user = new User;
+    User *user = new User;
     row = mysql_fetch_row(res);
-    user.set_account(row[0]);
-    user.set_mid(row[1]);
-    user.set_nick_name(row[2]);
-    user.set_level(row[3]);
-    user.set_head_url(row[4]);
-    user.set_video_url(row[5]);
+    user->set_account(row[0]);
+    use->set_mid(row[1]);
+    user->set_nick_name(row[2]);
+    user->set_level(row[3]);
+    user->set_head_url(row[4]);
+    user->set_video_url(row[5]);
     return user;
 }
 
