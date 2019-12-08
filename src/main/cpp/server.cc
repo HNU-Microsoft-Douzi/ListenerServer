@@ -102,7 +102,7 @@ public :
 			User *user = getUserInfoFromDB(account);
             State *state = new State();
             state->set_result(MISTAKE);
-			state.set_code(USER_IS_NOT_EXIST);
+			state->set_code(USER_IS_NOT_EXIST);
             response->set_allocated_state(state);
             response->set_message("The user name has not been registered, please try again");
 			return Status::OK;
@@ -161,7 +161,7 @@ public:
             return statusGenerated(MISTAKE, USER_TOKEN_IS_INVALID, errorMsg, response);
         }
 
-        if (!this->isUserExist(account)) {
+        if (!isUserExist(account)) {
             cout << account + " is not register!" << endl;
             return statusGenerated(MISTAKE, USER_IS_NOT_EXIST,
                                    "The user name has not been registered, please try again",
@@ -241,7 +241,7 @@ public:
             cout << errorMsg << endl;
             return statusGenerated(MISTAKE, USER_TOKEN_IS_INVALID, errorMsg, response);
         }
-        if (!this->isUserExist(account)) {
+        if (!isUserExist(account)) {
             cout << account + " is not register!" << endl;
             return statusGenerated(MISTAKE, USER_IS_NOT_EXIST,
                                    "The user name has not been registered, please try again",
@@ -287,7 +287,7 @@ public:
         string account = request->account();
         string password = request->encodepassword();
         password = decrypt(password);
-        bool isUE = this->isUserExist(account);
+        bool isUE = isUserExist(account);
         if (!isUE) {
             return statusGenerated(MISTAKE, USER_IS_NOT_EXIST,
                                    "change password fail, user is not exist", response);
@@ -311,7 +311,7 @@ public:
         string account = request->account();
         string password = request->encodepassword();
         password = decrypt(password);
-        bool isUE = this->isUserExist(account);
+        bool isUE = isUserExist(account);
         if (!isUE) {
             // database has no data, execute insert-operation is allowed, and insert result will be returned to client.
             string sql =
