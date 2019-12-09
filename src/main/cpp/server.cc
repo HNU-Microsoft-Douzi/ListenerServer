@@ -89,7 +89,7 @@ public :
 			state->set_code(USER_TOKEN_IS_INVALID);
             response->set_allocated_state(state);
             response->set_message("token auth_code verify fail");
-			response->set_user(user);
+			response->set_allocated_user(user);
 			return Status::OK;
             }
         } catch (const char *msg) {
@@ -121,7 +121,7 @@ public :
             state->set_result(SUCCESS);
             response->set_allocated_state(state);
             response->set_message("doctor authentication get succeed!");
-            response->set_user(user);
+            response->set_allocated_user(user);
         } else {
             printf("Select failed (%s)\n", mysql_error(&mysql));
             State *state = new State();
