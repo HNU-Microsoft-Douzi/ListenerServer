@@ -14,7 +14,6 @@ cc_binary(
 		"server.cc", 
 		"token_control.cpp",
 		"wes_encryption_algorithm.cpp",
-		"server_error.h",
 		"token_control.h",
 		"wes_encryption_algorithm.h",
 		],

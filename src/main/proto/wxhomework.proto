@@ -2,100 +2,139 @@ syntax = "proto3";
 
 package wxhomework;
 
-// 笑话Service——学生通过情绪认证后页面展示的内容
-service JokeService {
-    rpc doGetJoke(JokeRequest) returns (JokeResponse) {}
-}
-
-message JokeRequest {
-    sint32 num = 1;
-}
-
-message JokeResponse {
-    string jokeId = 1;
-    string joke_content = 2;
-}
-
-// 消息传递Service
-service MessageService {
-    rpc doMessageBroadcast(SendMessageRequest) returns (SendMessageResponse) {}
-    rpc doMessageReceiver(ReceiveMessageRequest) returns (ReceiveMessageResponse) {}
-    rpc doPraise(PraiseRequest) returns (PraiseResponse) {}
-}
-
-// 支持请求体
-message PraiseRequest {
-    string account = 1;
-    string messageAccount = 2;
-    repeated string messageId = 3;
-}
-
-message PraiseResponse {
-    string message = 1;
-    State state = 2;
-}
-
-// 接收消息的请求
-message ReceiveMessageRequest {
-    string account = 1;
-    string token = 2;
-}
-
-// 接收消息的响应
-message ReceiveMessageResponse {
-    repeated ReceiverMessage message = 1;
-}
-
-
-// 发送消息的请求
-message SendMessageRequest {
-    Message message = 1;
-    string token = 2;
-}
-
-// 发送消息的响应
-message SendMessageResponse {
-    string message = 1;
-    State state = 2;
-}
-
-// 接收消息包——对应mysql中的receiver_message表
-message ReceiverMessage {
-    string account = 1;
-    repeated string messageId = 2;
-    string messageAccount = 3;
-    string createTime = 4;
-}
-
-// 发送消息包——对应mysql中的message表
-message Message {
-    string messageId = 1;
-    string account = 2;
-    string createTime = 3;
-    string content = 4;
-    sint32 sharePersonNums = 5; // 广播普通人接收人数
-    sint32 shareDoctorNums = 6; // 广播医生接收人数
-    sint32 praiseNums = 7; // 接收量
-}
-
-// 资格认证Service
-service CcatService {
-    rpc doDoctorCCAT(UserInfoRequest) returns (CCATResponse) {}
-}
-
-// 资格认证回应体
-message CCATResponse {
-    string message = 1;
-    State state = 2;
-    User user = 3;
-}
-
-// 登录模块Service
-service LoginService {
+service WxHomework {
     rpc doLogin(UserInfoRequest) returns (UserLoginResponse) {}
     rpc doLoginOut(UserInfoRequest) returns (UserLoginResponse) {}
     rpc doRegister(UserInfoRequest) returns (UserRegisterResponse) {}
     rpc doPasswordChange(UserInfoRequest) returns (UserPasswordChangeResponse) {}
+
+    rpc doMessageBroadcast(SendMessageRequest) returns (SendMessageResponse) {}
+    rpc doMessageReceiver(ReceiveMessageRequest) returns (stream RMResponse) {}
+    rpc doMessageSend(DoctorMessageRequest) returns (DoctorMessageResponse) {}
+    rpc doMessageHasRead(MessageReadRequest) returns (MessageReadResponse) {}
+    rpc doGetHistoryMessages(HistoryMessageRequest) returns (stream HistoryMessageResponse) {}
+    rpc doPraise(PraiseRequest) returns (PraiseResponse) {}
+    rpc doOrganizationCodeVerify(OrganizationCodeRequest) returns(OrganizationCodeResponse) {}
+    rpc doGetMessageById(MessageRequest) returns (MessageResponse) {}
+    rpc doMessageResponsedByDoctor(MRDRequest) returns(MRDResponse) {}
+    rpc doUpdateDoctorWithdrawLevel(DoctorWithdrawLevelRequest) returns(DoctorWithdrawLevelResponse) {}
+
+    rpc doDoctorCCAT(UserInfoRequest) returns (CCATResponse) {}
+    rpc doQuestionGet(QuestionRequest) returns (stream QuestionResponse) {}
+    rpc doAnswerGet(AnswerRequest) returns (stream AnswerResponse) {}
+    rpc doGradeUpdate(GradeRequest) returns(GradeResponse) {}
+
+    rpc doGetJoke(JokeRequest) returns (stream JokeResponse) {}
+}
+message MRDRequest{
+    string account = 1;
+    string token = 2;
+
+    string messageId = 3;
+}
+
+message MRDResponse{
+    bool result = 1;
+}
+
+message MessageRequest{
+    string account = 1;
+    string token = 2;
+    string messageId = 3;
+}
+
+message MessageResponse{
+    string content = 1;
+    string time = 2;
+}
+
+message DoctorWithdrawLevelRequest{
+    string account = 1;
+    string token = 2;
+
+    string messageid = 4;
+    int32 level = 3;
+}
+
+message DoctorWithdrawLevelResponse{
+
+}
+
+message OrganizationCodeRequest {
+    string account = 1;
+    string token = 2;
+    string code = 3;
+}
+
+message OrganizationCodeResponse {
+    bool result = 1;
+}
+
+message DoctorMessageRequest{
+    string account = 1;
+    string token = 2;
+    string messageId = 3;
+    string message = 4;
+}
+
+message DoctorMessageResponse{
+
+}
+
+message GradeRequest{
+    string account = 1;
+    string token = 2;
+    int32 grade = 3;
+}
+
+message GradeResponse {
+    int32 level = 1;
+}
+
+message AnswerRequest{
+    string account = 1;
+    string token = 2;
+    string questionId = 3;
+}
+
+message AnswerResponse {
+    string answerId = 1;
+    string content = 2;
+}
+
+
+message QuestionRequest{
+    string account = 1;
+    string token = 2;
+    string type = 3; // 0：情绪倾诉类型题目;  1：医生倾诉类型题目
+    int32 num = 4; // 数目
+}
+
+message QuestionResponse {
+    string questionId = 1;
+    string questiontitle = 2;
+    string questionAnswerId = 3;
+}
+
+message HistoryMessageRequest {
+    string account = 1;
+    string token = 2;
+}
+
+message HistoryMessageResponse {
+    string messageId = 1;
+    string content = 2;
+    string createTime = 3;
+}
+
+message MessageReadRequest {
+    string account = 1;
+    string messageId = 2;
+    string token = 3;
+}
+
+message MessageReadResponse {
+
 }
 
 message UserInfoRequest {
@@ -105,27 +144,76 @@ message UserInfoRequest {
 }
 
 message UserLoginResponse {
-    string message = 1;
-    State state = 2;
-    User user = 3;
-    bool has_message = 4; // 是否有未读信息
+    string token = 1;
+    User user = 2;
 }
 
 message UserPasswordChangeResponse {
-    string message = 1;
-    State state = 2;
-    User user = 3;
+    string token = 1;
 }
 
 message UserRegisterResponse {
-    string message = 1;
-    State state = 2;
-    User user = 3;
+    string token = 1;
 }
 
-message State {
-    string result = 1;
-    string code = 2;
+// 支持请求体
+message PraiseRequest {
+    string account = 1;
+    string token = 2;
+    string messageId = 3;
+}
+
+message PraiseResponse {
+}
+
+// 接收消息的请求
+message ReceiveMessageRequest {
+    string account = 1;
+    string token = 2;
+
+    bool isDoctor = 3;
+}
+
+message RMResponse {
+    // 倾诉消息
+    string messageId = 1;
+    string content = 2;
+    string mid = 3;
+    int32 praiseNum = 4;
+
+    // 医生回执消息的补充内容
+    string doctorId = 5;
+    int32 level = 6;
+    string return_message_id = 7;
+
+    string createTime = 8;
+    string userHead = 9;
+    string userName = 10;
+}
+
+// 发送消息的请求
+message SendMessageRequest {
+    string account = 1;
+    Message message = 2;
+    string token = 3;
+}
+
+// 发送消息的响应
+message SendMessageResponse {
+}
+
+// 发送消息包——对应mysql中的message表
+message Message {
+    string account = 1;
+    string createTime = 2;
+    string content = 3;
+    sint32 sharePersonNums = 4; // 广播普通人接收人数
+    sint32 shareDoctorNums = 5; // 广播医生接收人数
+}
+
+// 资格认证回应体
+message CCATResponse {
+    User user = 1;
 }
 
 message User {
@@ -135,4 +223,19 @@ message User {
     string level = 6;
     string head_url = 7;
     string video_url = 8;
+    string ccat_mid = 9;
+    float withdraw = 10;
+    int64 experience_index = 11;
+}
+
+
+message JokeRequest {
+    sint32 num = 1;
+    string account = 2;
+    string token = 3;
+}
+
+message JokeResponse {
+    string jokeId = 1;
+    string joke_content = 2;
 }

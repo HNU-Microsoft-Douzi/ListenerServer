@@ -1,0 +1,9 @@
+bazel build //src/main/cpp:libclient.so \
+	--crosstool_top=//external:android/crosstool \
+	--host_crosstool_top=@bazel_tools//tools/cpp:toolchain \
+	--cpu=armeabi-v7a \
+	--compiler=clang8.0.2
+
+rm -rf runfiles/libclient.so
+
+mv bazel-bin/src/main/cpp/libclient.so runfiles
