@@ -425,9 +425,12 @@ private:
     vector <string> getNormalSharedPerson(string account, int num) {
         cout << "---------> getNormalSharedPerson" << endl;
         // 一次性拿到所有的普通人列表，然后随机数选出其中num的人
-        string sql = "select account from user where (account <> '"
-                     + account + "' and mid = 0) ORDER BY RAND() LIMIT "
-                     + to_string(num) + ";";
+        //string sql = "select account from user where (account <> '"
+        //             + account + "' and mid = 0) ORDER BY RAND() LIMIT "
+        //             + to_string(num) + ";";
+	// 为了方便测试，一次性拿到所有的普通用户列表
+	string sql = "select account from user where (account <> '"
+                     + account + "' and mid = 0)";
         executeSql(sql);
         if (!res) {
             cout << "----> mysql_store_result error" << endl;
@@ -443,9 +446,12 @@ private:
     vector <string> getDoctorSharedPerson(string account, int num) {
         cout << "---------> getDoctorSharedPerson" << endl;
         // 一次性拿到所有的普通人列表，然后随机数选出其中num的人
-        string sql = "select account from user where (account <> '"
-                     + account + "' and mid = 1) ORDER BY RAND() LIMIT "
-                     + to_string(num) + ";";
+        //string sql = "select account from user where (account <> '"
+        //             + account + "' and mid = 1) ORDER BY RAND() LIMIT "
+        //             + to_string(num) + ";";
+	// 为了方便测试，一次性拿到所有的医生账号列表
+	string sql = "select account from user where (account <> '"
+	        	+ account + "' and mid = 1)";
         executeSql(sql);
         if (!res) {
             cout << "----> mysql_store_result error" << endl;
